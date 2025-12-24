@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SLY Assistant
 // @namespace    http://tampermonkey.net/
-// @version      0.7.33
+// @version      0.7.34
 // @description  try to take over the world!
 // @author       SLY w/ Contributions by niofox, SkyLove512, anthonyra, [AEP] Valkynen, Risingson, Swift42
 // @match        https://*.based.staratlas.com/
@@ -487,7 +487,16 @@
 	let currentFee = globalSettings.priorityFee; //autofee
 
 	let sageProgram = new BrowserAnchor.anchor.Program(sageIDL, sageProgramPK, anchorProvider);
-	let [sageGameAcct] = await sageProgram.account.game.all();
+	//let [sageGameAcct] = await sageProgram.account.game.all();
+    let sageGameAccts = await sageProgram.account.game.all();
+    let sageGameAcct = null;
+    for (let curAcct of sageGameAccts) {
+        if(curAcct.account.gameState.toString()!='11111111111111111111111111111111') {
+            sageGameAcct = curAcct;
+            break;
+        }
+    }
+
 	let cargoStatsDefinitionAcctPK = sageGameAcct.account.cargo.statsDefinition;
 	let [sageSDUTrackerAcct] = await sageProgram.account.surveyDataUnitTracker.all();
 	let profileProgram = new BrowserAnchor.anchor.Program(profileIDL, profileProgramPK, anchorProvider);
